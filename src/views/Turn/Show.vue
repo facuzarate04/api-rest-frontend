@@ -1,36 +1,27 @@
 <template>
-    <div class="">
-        {{turn}}
-        <form action="" class="p=5 bg-gray-200">
-            <div class="p-2 space-y-2 space-x-4">
-                <label for="date">Date</label>
-                <input type="date" class="" v-model="update_form.date">
-            </div>
-            <div class="p-2 space-y-2 space-x-4">
-                <label for="date">Duration</label>
-                <input type="numeric" step="0.10" class="" v-model="update_form.duration">
-            </div>
-        </form>
+    <div v-if="turn" class="p-2 bg-gray-300 space-y-4">
+        <h1 class="">{{turn.client.name}}</h1>
+        <h1 class="">{{turn.client.email}}</h1>
+        <h1 class="">{{turn.date}}</h1>
+        <h4 class="">{{turn.duration}}</h4>
+        <router-link :to="'/turns/'+turn.id+'/edit'" class="">Edit</router-link>
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import 'vue3-date-time-picker/dist/main.css'
 export default {
     data() {
         return { 
-            update_form: {
-                client_id: null,
-                date: null,
-                duration: null
-            },
             turn: null,
-            url: process.env.BACKEND_URL
         }
     },
     mounted() {
-        axios.get(this.url+'/turns/1')
-        .then((response) => this.turn = response.data)
-    }
+        axios.get(process.env.API_URL+'/turns/'+this.$route.params.id)
+        .then((response) => 
+                this.turn = response.data,
+            )
+    },
 }
 </script>
